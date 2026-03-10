@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.kuzmina.unscramblegame_kuz.ui.theme.UnscrambleGame_KuzTheme
+import com.kuzmina.unscramblegame_kuz.ui_model.GameScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,29 +20,14 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             UnscrambleGame_KuzTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+               Scaffold(
+                   modifier = Modifier.fillMaxSize()
+               ) { innerPadding ->
+                   GameScreen(
+                       modifier = Modifier.padding(innerPadding)
+                   )
+               }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    UnscrambleGame_KuzTheme {
-        Greeting("Android")
     }
 }
