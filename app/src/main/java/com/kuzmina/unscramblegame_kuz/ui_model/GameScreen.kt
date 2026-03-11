@@ -58,8 +58,13 @@ fun GameScreen(
         )
         GameLayolt(
             currentScrambleWord = gameUiState.currentScrambledWord,
-            onUserGuessChanged = { },
-            onKeyboardDone = { }
+            userGuess = gameViewModel.userGuess,
+            onUserGuessChanged = {  gameViewModel.updateUserGuess(it)},
+            onKeyboardDone = { gameViewModel.checkUserGuess() },
+            isGuessWrong = gameUiState.isGuessedWordWrong,
+            onSubmitClicked = { gameViewModel.checkUserGuess()},
+            onSkipClicked = {gameViewModel.skipWord()}
+
         )
     }
 
@@ -99,8 +104,12 @@ fun GameStatus(
 @Composable
 fun GameLayolt(
     currentScrambleWord: String,
+    userGuess: String,
     onUserGuessChanged: (String) -> Unit,
     onKeyboardDone: () -> Unit,
+    isGuessWrong: Boolean,
+    onSubmitClicked: () -> Unit,
+    onSkipClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var userGuess by remember { mutableStateOf("") }
@@ -141,6 +150,7 @@ fun GameLayolt(
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
             label = {Text("Введите слово")},
+            isError = isGuessWrong,
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Done
             ),
@@ -148,8 +158,15 @@ fun GameLayolt(
                 onDone = { onKeyboardDone() }
             )
         )
+        if (isGuessWrong) {
+            Text(
+                text = "Неправильно! Попробуйте еще раз",
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
         Button(
-            onClick = { /* TODO */},
+            onClick = onSubmitClicked,
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(
@@ -158,7 +175,7 @@ fun GameLayolt(
             )
         }
         OutlinedButton(
-            onClick = { /* TODO  */},
+            onClick = onSkipClicked,
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(

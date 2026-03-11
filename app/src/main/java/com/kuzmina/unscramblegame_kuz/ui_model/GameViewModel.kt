@@ -45,7 +45,19 @@ class GameViewModel : ViewModel(){
         }
     }
     fun checkUserGuess(){
-
+        if (userGuess.equals(currentWord, ignoreCase = true)) {
+            val updateScore = _uiState.value.score  + SCORE_INCREASE
+            updateGameState(updateScore)
+        } else {
+            _uiState.update { currentState ->
+                currentState.copy(isGuessedWordWrong = true)
+            }
+        }
+        updateUserGuess("")
+    }
+    fun skipWord() {
+        updateGameState(_uiState.value.score)
+        updateUserGuess("")
     }
     private fun shuffleCurrentWord(word: String): String{
         val tempWord = word.toCharArray()
